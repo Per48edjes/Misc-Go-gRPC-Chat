@@ -1,0 +1,10 @@
+[project]
+name = "misc-go-grpc-chat"
+version = "0.1.0"
+description = "A simple gRPC chat app in Go (server) and Python (client)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "grpcio>=1.72.1",
+    "grpcio-tools>=1.72.1",
+]
