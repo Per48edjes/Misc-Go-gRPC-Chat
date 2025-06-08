@@ -1,6 +1,6 @@
 PROTO_DIR := proto
-GO_OUT := server
-PY_OUT := client
+GO_OUT := gen/go
+PY_OUT := gen/python
 VENV_DIR := .venv
 PROTOC_GEN_GO := $(shell go env GOPATH)/bin/protoc-gen-go
 PROTOC_GEN_GO_GRPC := $(shell go env GOPATH)/bin/protoc-gen-go-grpc
@@ -23,7 +23,7 @@ $(VENV_DIR)/bin/activate: pyproject.toml
 	. $(VENV_DIR)/bin/activate && pip install -r requirements.txt
 
 build-go: setup-go-deps $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC)
-	protoc --go_out=$(GO_OUT) --go-grpc_out=$(GO_OUT) $(PROTO_DIR)/*.proto
+	protoc $(PROTO_DIR)/*.proto --go_out=. --go_opt=module=github.com/Per48edjes/Misc-Go-gRPC-Chat --go-grpc_out=. --go-grpc_opt=module=github.com/Per48edjes/Misc-Go-gRPC-Chat
 
 build-python: setup-python-venv
 	. $(VENV_DIR)/bin/activate && python -m grpc_tools.protoc -I$(PROTO_DIR) --python_out=$(PY_OUT) --grpc_python_out=$(PY_OUT) $(PROTO_DIR)/*.proto
