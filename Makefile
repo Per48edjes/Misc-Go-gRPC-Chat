@@ -11,16 +11,18 @@ all: build-go build-python
 
 setup-go-deps:
 	go mod tidy
+	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
 setup-python-venv: $(VENV_DIR)/bin/activate
 
 $(VENV_DIR)/bin/activate: pyproject.toml
 	@if [ ! -d "$(VENV_DIR)" ]; then \
 		echo "Creating virtual environment..."; \
-		python3 -m venv $(VENV_DIR); \
+		uv venv --project .; \
 	fi
 	@echo "Installing Python dependencies..."; \
-	. $(VENV_DIR)/bin/activate && pip install -r requirements.txt
+		uv sync --locked; \
 
 build-go: setup-go-deps $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC)
 	protoc $(PROTO_DIR)/*.proto --go_out=. --go_opt=module=github.com/Per48edjes/Misc-Go-gRPC-Chat --go-grpc_out=. --go-grpc_opt=module=github.com/Per48edjes/Misc-Go-gRPC-Chat
