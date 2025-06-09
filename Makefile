@@ -9,10 +9,13 @@ PROTOC_GEN_GO_GRPC := $(shell go env GOPATH)/bin/protoc-gen-go-grpc
 
 all: build-go build-python
 
+.PHONY: setup-go-deps
 setup-go-deps:
 	go mod tidy
-	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+	@echo "Installing protoc-gen-go (pinned)…"
+	go install google.golang.org/protobuf/cmd/protoc-gen-go
+	@echo "Installing protoc-gen-go-grpc (pinned)…"
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 
 setup-python-venv: $(VENV_DIR)/bin/activate
 
