@@ -12,10 +12,12 @@ import (
 type ChatServer struct {
 	pb.UnimplementedChatServiceServer
 
-	mu      sync.Mutex
+	mu      sync.RWMutex
 	clients map[int64]chan *pb.ChatMessage
 	nextID  int64
 }
+
+var messageBufferSize = 100 // Buffer size for each client's message channel
 
 func main() {
 	lis, err := net.Listen("tcp", ":50051")
@@ -68,7 +70,7 @@ func (s *ChatServer) registerClient() (int64, chan *pb.ChatMessage) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	ch := make(chan *pb.ChatMessage, 10)
+	ch := make(chan *pb.ChatMessage, messageBufferSize)
 	s.nextID++
 	s.clients[s.nextID] = ch
 	return s.nextID, ch
@@ -85,10 +87,13 @@ func (s *ChatServer) unregisterClient(id int64) {
 }
 
 func (s *ChatServer) broadcast(msg *pb.ChatMessage) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 
 	for _, ch := range s.clients {
-		ch <- msg
+		select {
+		case ch <- msg:
+		default:
+		}
 	}
 }
