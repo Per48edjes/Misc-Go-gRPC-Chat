@@ -92,7 +92,7 @@ const file_proto_chat_proto_rawDesc = "" +
 	"\ttimestamp\x18\x03 \x01(\x03R\ttimestamp2E\n" +
 	"\vChatService\x126\n" +
 	"\n" +
-	"ChatStream\x12\x11.chat.ChatMessage\x1a\x11.chat.ChatMessage(\x010\x01B0Z.github.com/Per48edjes/Misc-Go-gRPC-Chat/gen/gob\x06proto3"
+	"ChatStream\x12\x11.chat.ChatMessage\x1a\x11.chat.ChatMessage(\x010\x01B0Z.github.com/Per48edjes/Misc-Go-gRPC-Chat/protos/gob\x06proto3"
 
 var (
 	file_proto_chat_proto_rawDescOnce sync.Once

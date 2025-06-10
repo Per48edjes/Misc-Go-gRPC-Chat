@@ -4,8 +4,8 @@ import time
 
 import grpc
 
-from gen.python import chat_pb2
-from gen.python import chat_pb2_grpc
+from protos.python import chat_pb2
+from protos.python import chat_pb2_grpc
 
 
 def _request_generator(username: str, q: queue.Queue):

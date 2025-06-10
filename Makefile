@@ -1,6 +1,6 @@
 PROTO_DIR := proto
-GO_OUT := gen/go
-PY_OUT := gen/python
+GO_OUT := protos/go
+PY_OUT := protos/python
 VENV_DIR := .venv
 PROTOC_GEN_GO := $(shell go env GOPATH)/bin/protoc-gen-go
 PROTOC_GEN_GO_GRPC := $(shell go env GOPATH)/bin/protoc-gen-go-grpc
