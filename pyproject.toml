@@ -8,3 +8,11 @@ dependencies = [
     "grpcio>=1.72.1",
     "grpcio-tools>=1.72.1",
 ]
+
+[build-system]
+requires = ["setuptools>=65"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["gen*", "cmd*"]
