@@ -3,6 +3,10 @@ syntax = "proto3";
 package chat;
 
 option go_package = "github.com/Per48edjes/Misc-Go-gRPC-Chat/gen/go";
+// Python stubs should be under the gen.python package so the client can import
+// them as `gen.python.chat_pb2` and `gen.python.chat_pb2_grpc` without
+// modifying sys.path at runtime.
+option python_package = "gen.python";
 
 service ChatService {
   rpc ChatStream(stream ChatMessage) returns(stream ChatMessage);
