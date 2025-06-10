@@ -17,7 +17,7 @@ type ChatServer struct {
 	nextID  int64
 }
 
-var messageBufferSize = 100 // Buffer size for each client's message channel
+const messageBufferSize = 100 // Buffer size for each client's message channel
 
 func main() {
 	lis, err := net.Listen("tcp", ":50051")
