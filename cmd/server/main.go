@@ -50,6 +50,10 @@ func (s *ChatServer) ChatStream(stream pb.ChatService_ChatStreamServer) error {
 			msg, err := stream.Recv()
 			// stream.Recv() returns io.EOF when the client closes
 			if err != nil {
+				if err == io.EOF {
+					break
+				}
+				log.Printf("error receiving message from client: %v", err)
 				break
 			}
 			s.broadcast(msg)
@@ -90,10 +94,11 @@ func (s *ChatServer) broadcast(msg *pb.ChatMessage) {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
-	for _, ch := range s.clients {
+	for id, ch := range s.clients {
 		select {
 		case ch <- msg:
 		default:
+			log.Printf("Warning: Message dropped for client %d due to full channel", id)
 		}
 	}
 }
