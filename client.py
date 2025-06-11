@@ -54,9 +54,19 @@ def main() -> None:
                     if text == "/quit":
                         break
                     send_q.put(text)
+        except KeyboardInterrupt:
+            print("KeyboardInterrupt received, exiting...")
+        except Exception as e:
+            print(f"unanticipated exception: {e}")
         finally:
             send_q.put(None)
-            recv_thread.join()
+            try:
+                call.cancel()
+            except Exception as e:
+                print(f"Failed to cancel the call: {e}")
+            recv_thread.join(timeout=2)
+            if recv_thread.is_alive():
+                print("Warning: recv_thread did not terminate within the timeout.")
 
     print("Disconnected")
 
