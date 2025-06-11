@@ -54,6 +54,8 @@ def main() -> None:
                     if text == "/quit":
                         break
                     send_q.put(text)
+        except KeyboardInterrupt:
+            print("KeyboardInterrupt received, exiting...")
         except Exception as e:
             print(f"unanticipated exception: {e}")
         finally:
