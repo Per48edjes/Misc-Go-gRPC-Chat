@@ -65,6 +65,8 @@ def main() -> None:
             except Exception:
                 pass
             recv_thread.join(timeout=2)
+            if recv_thread.is_alive():
+                print("Warning: recv_thread did not terminate within the timeout.")
 
     print("Disconnected")
 
