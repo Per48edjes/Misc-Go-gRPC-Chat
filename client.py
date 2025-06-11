@@ -52,8 +52,6 @@ def main() -> None:
                 while True:
                     text = session.prompt("", multiline=False)
                     if text == "/quit":
-                        send_q.put(None)
-                        call.cancel()
                         break
                     send_q.put(text)
         finally:
