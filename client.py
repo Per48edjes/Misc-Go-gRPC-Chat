@@ -52,10 +52,16 @@ def main() -> None:
                 while True:
                     text = session.prompt("", multiline=False)
                     if text == "/quit":
+                        send_q.put(None)
+                        call.cancel()
                         break
                     send_q.put(text)
         finally:
             send_q.put(None)
+            try:
+                call.cancel()
+            except Exception:
+                pass
             recv_thread.join()
 
     print("Disconnected")
