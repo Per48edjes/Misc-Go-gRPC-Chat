@@ -9,7 +9,7 @@ PROTOC_GEN_GO_GRPC := $(shell go env GOPATH)/bin/protoc-gen-go-grpc
 all: setup-go-deps build-python
 
 .PHONY: setup-go-deps
-setup-go-deps: build-go
+setup-go-deps:
 	go mod tidy
 	@echo "Installing protoc-gen-go (pinned)…"
 	go install google.golang.org/protobuf/cmd/protoc-gen-go
@@ -26,7 +26,7 @@ $(VENV_DIR)/bin/activate: pyproject.toml
 	@echo "Installing Python dependencies..."; \
 		uv sync --locked; \
 
-build-go: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC)
+build-go: setup-go-deps $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC)
 	protoc $(PROTO_DIR)/*.proto --go_out=$(PROTO_DIR) --go_opt=module=github.com/Per48edjes/Misc-Go-gRPC-Chat --go-grpc_out=$(PROTO_DIR) --go-grpc_opt=module=github.com/Per48edjes/Misc-Go-gRPC-Chat
 
 build-python: setup-python-venv
