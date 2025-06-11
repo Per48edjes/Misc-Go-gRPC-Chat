@@ -1,4 +1,4 @@
-# Misc Go gRPC Chat
+# A Toy Go + gRPC Chat Service
 
 A minimal chat application with a Go server and a Python client.
 
