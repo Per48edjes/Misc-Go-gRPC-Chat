@@ -3,6 +3,8 @@ import threading
 import time
 
 import grpc
+from prompt_toolkit import PromptSession
+from prompt_toolkit.patch_stdout import patch_stdout
 
 from proto import chat_pb2, chat_pb2_grpc
 
@@ -34,6 +36,8 @@ def main() -> None:
     username = input("Enter username: ").strip() or "anon"
     send_q: queue.Queue[str | None] = queue.Queue()
 
+    session = PromptSession()
+
     with grpc.insecure_channel("localhost:50051") as channel:
         stub = chat_pb2_grpc.ChatServiceStub(channel)
         call = stub.ChatStream(_request_generator(username, send_q))
@@ -44,11 +48,12 @@ def main() -> None:
         recv_thread.start()
 
         try:
-            while True:
-                text = input()
-                if text == "/quit":
-                    break
-                send_q.put(text)
+            with patch_stdout():
+                while True:
+                    text = session.prompt("", multiline=False)
+                    if text == "/quit":
+                        break
+                    send_q.put(text)
         finally:
             send_q.put(None)
             recv_thread.join()
