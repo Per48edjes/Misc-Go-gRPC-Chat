@@ -8,6 +8,7 @@ dependencies = [
     "grpcio-tools>=1.71.0",
     "grpcio>=1.73.0",
     "protoletariat>=3.3.10",
+    "prompt_toolkit>=3.0",
 ]
 
 [build-system]
