@@ -62,8 +62,8 @@ def main() -> None:
             send_q.put(None)
             try:
                 call.cancel()
-            except Exception:
-                pass
+            except Exception as e:
+                print(f"Failed to cancel the call: {e}")
             recv_thread.join(timeout=2)
             if recv_thread.is_alive():
                 print("Warning: recv_thread did not terminate within the timeout.")
