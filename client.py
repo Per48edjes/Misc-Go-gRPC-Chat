@@ -64,7 +64,7 @@ def main() -> None:
                 call.cancel()
             except Exception:
                 pass
-            recv_thread.join()
+            recv_thread.join(timeout=2)
 
     print("Disconnected")
 
