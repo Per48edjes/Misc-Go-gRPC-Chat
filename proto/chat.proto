@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package chat;
 
-option go_package = "github.com/Per48edjes/Misc-Go-gRPC-Chat/gen/go";
+option go_package = "github.com/Per48edjes/Misc-Go-gRPC-Chat";
 
 service ChatService {
   rpc ChatStream(stream ChatMessage) returns(stream ChatMessage);

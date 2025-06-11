@@ -1,1 +1,3 @@
 .venv/
+misc_go_grpc_chat.egg-info/
+*.pyi

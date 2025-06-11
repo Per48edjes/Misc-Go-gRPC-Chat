@@ -6,7 +6,7 @@ import (
 	"net"
 	"sync"
 
-	pb "github.com/Per48edjes/Misc-Go-gRPC-Chat/gen/go" // protobuf package
+	pb "github.com/Per48edjes/Misc-Go-gRPC-Chat/proto" // protobuf package
 	"google.golang.org/grpc"
 )
 

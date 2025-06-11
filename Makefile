@@ -1,16 +1,15 @@
 PROTO_DIR := proto
-GO_OUT := gen/go
-PY_OUT := gen/python
 VENV_DIR := .venv
 PROTOC_GEN_GO := $(shell go env GOPATH)/bin/protoc-gen-go
 PROTOC_GEN_GO_GRPC := $(shell go env GOPATH)/bin/protoc-gen-go-grpc
 
 .PHONY: all clean build-go build-python setup-python-venv setup-go-deps
 
-all: build-go build-python
+# WARN: Run from project root directory!
+all: setup-go-deps build-python
 
 .PHONY: setup-go-deps
-setup-go-deps:
+setup-go-deps: build-go
 	go mod tidy
 	@echo "Installing protoc-gen-go (pinned)…"
 	go install google.golang.org/protobuf/cmd/protoc-gen-go
@@ -27,13 +26,25 @@ $(VENV_DIR)/bin/activate: pyproject.toml
 	@echo "Installing Python dependencies..."; \
 		uv sync --locked; \
 
-build-go: setup-go-deps $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC)
-	protoc $(PROTO_DIR)/*.proto --go_out=. --go_opt=module=github.com/Per48edjes/Misc-Go-gRPC-Chat --go-grpc_out=. --go-grpc_opt=module=github.com/Per48edjes/Misc-Go-gRPC-Chat
+build-go: $(PROTOC_GEN_GO) $(PROTOC_GEN_GO_GRPC)
+	protoc $(PROTO_DIR)/*.proto --go_out=$(PROTO_DIR) --go_opt=module=github.com/Per48edjes/Misc-Go-gRPC-Chat --go-grpc_out=$(PROTO_DIR) --go-grpc_opt=module=github.com/Per48edjes/Misc-Go-gRPC-Chat
 
 build-python: setup-python-venv
-	. $(VENV_DIR)/bin/activate && python -m grpc_tools.protoc -I$(PROTO_DIR) --python_out=$(PY_OUT) --grpc_python_out=$(PY_OUT) $(PROTO_DIR)/*.proto
+	@echo "Building Python code..."
+	. $(VENV_DIR)/bin/activate && \
+	  echo "Generating Python gRPC code…" && \
+	  python -m grpc_tools.protoc -I$(PROTO_DIR) \
+	    --python_out=$(PROTO_DIR) \
+	    --grpc_python_out=$(PROTO_DIR) \
+	    $(PROTO_DIR)/*.proto && \
+	  echo "Fixing Python imports with Protoletariat…" && \
+	  protol --create-package --in-place \
+	    --python-out $(PROTO_DIR) \
+	    protoc --proto-path=$(PROTO_DIR) $(PROTO_DIR)/*.proto && \
+	  echo "Installing project as editable package…" && \
+	  uv pip install --editable .
 
 clean:
-	rm -f $(GO_OUT)/*.pb.go
-	rm -f $(PY_OUT)/*_pb2.py
-	rm -f $(PY_OUT)/*_pb2_grpc.py
+	rm -f $(PROTO_DIR)/*.pb.go
+	rm -f $(PROTO_DIR)/*_pb2.py
+	rm -f $(PROTO_DIR)/*_pb2_grpc.py

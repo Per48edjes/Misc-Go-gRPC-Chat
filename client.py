@@ -1,11 +1,10 @@
-import threading
 import queue
+import threading
 import time
 
 import grpc
 
-from gen.python import chat_pb2
-from gen.python import chat_pb2_grpc
+from proto import chat_pb2, chat_pb2_grpc
 
 
 def _request_generator(username: str, q: queue.Queue):
@@ -25,7 +24,7 @@ def _receive_messages(call):
     """Print messages received from the server."""
     try:
         for msg in call:
-            ts = time.strftime('%H:%M:%S', time.localtime(msg.timestamp))
+            ts = time.strftime("%H:%M:%S", time.localtime(msg.timestamp))
             print(f"[{ts}] {msg.user}: {msg.message}")
     except grpc.RpcError as e:
         print(f"stream closed: {e}")
@@ -39,7 +38,9 @@ def main() -> None:
         stub = chat_pb2_grpc.ChatServiceStub(channel)
         call = stub.ChatStream(_request_generator(username, send_q))
 
-        recv_thread = threading.Thread(target=_receive_messages, args=(call,), daemon=True)
+        recv_thread = threading.Thread(
+            target=_receive_messages, args=(call,), daemon=True
+        )
         recv_thread.start()
 
         try:

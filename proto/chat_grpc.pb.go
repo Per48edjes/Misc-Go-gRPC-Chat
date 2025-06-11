@@ -4,7 +4,7 @@
 // - protoc             v5.29.3
 // source: proto/chat.proto
 
-package _go
+package Misc_Go_gRPC_Chat
 
 import (
 	context "context"

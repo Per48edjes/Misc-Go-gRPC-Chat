@@ -5,8 +5,9 @@ description = "A simple gRPC chat app in Go (server) and Python (client)"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "grpcio>=1.72.1",
-    "grpcio-tools>=1.72.1",
+    "grpcio-tools>=1.71.0",
+    "grpcio>=1.73.0",
+    "protoletariat>=3.3.10",
 ]
 
 [build-system]
@@ -14,5 +15,5 @@ requires = ["setuptools>=65"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["gen*", "cmd*"]
+where = [".", "proto"]
+include = ["proto*"]
