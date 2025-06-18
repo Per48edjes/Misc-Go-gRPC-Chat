@@ -1,6 +1,7 @@
 import queue
 import threading
 import time
+from typing import Generator
 
 import grpc
 from prompt_toolkit import PromptSession
@@ -9,7 +10,9 @@ from prompt_toolkit.patch_stdout import patch_stdout
 from proto import chat_pb2, chat_pb2_grpc
 
 
-def _request_generator(username: str, q: queue.Queue):
+def _request_generator(
+    username: str, q: queue.Queue
+) -> Generator[chat_pb2.ChatMessage, None, None]:
     """Yield ChatMessage objects from the queue."""
     while True:
         message = q.get()
@@ -22,7 +25,7 @@ def _request_generator(username: str, q: queue.Queue):
         )
 
 
-def _receive_messages(call):
+def _receive_messages(call) -> None:
     """Print messages received from the server."""
     try:
         for msg in call:
