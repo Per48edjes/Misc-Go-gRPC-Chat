@@ -1,4 +1,5 @@
 import queue
+import sys
 import threading
 import time
 from typing import Generator
@@ -45,9 +46,7 @@ def main() -> None:
         try:
             grpc.channel_ready_future(channel).result(timeout=2)
         except grpc.FutureTimeoutError:
-            print(
-                "Error: could not connect to chat server on localhost:50051."
-            )
+            print("Error: could not connect to chat server on localhost:50051.")
             sys.exit(1)
 
         stub = chat_pb2_grpc.ChatServiceStub(channel)
