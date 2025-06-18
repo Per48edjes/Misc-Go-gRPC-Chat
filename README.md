@@ -1,6 +1,25 @@
 # A Toy Go + gRPC Chat Service
 
-A minimal chat application with a Go server and a Python client.
+A minimal chat application with a Go server and a Python client. 
+
+Make sure `uv`, `python`, and `go` are installed -- running `make` in the project root should setup the project dependencies correctly:
+
+```
+$ make
+
+Installing protoc-gen-go…
+Installing protoc-gen-go-grpc…
+Generating Go gRPC code…
+Tidying up Go modules…
+Installing Python dependencies…
+Resolved 10 packages in 12ms
+Audited 9 packages in 1ms
+Generating Python gRPC code…
+Fixing Python imports with Protoletariat…
+Installing project as editable package…
+Audited 1 package in 17ms
+
+```
 
 ## Running the server
 
