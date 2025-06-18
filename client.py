@@ -42,6 +42,14 @@ def main() -> None:
     session = PromptSession()
 
     with grpc.insecure_channel("localhost:50051") as channel:
+        try:
+            grpc.channel_ready_future(channel).result(timeout=2)
+        except grpc.FutureTimeoutError:
+            print(
+                "Error: could not connect to chat server on localhost:50051."
+            )
+            return
+
         stub = chat_pb2_grpc.ChatServiceStub(channel)
         call = stub.ChatStream(_request_generator(username, send_q))
 
