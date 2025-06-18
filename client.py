@@ -48,7 +48,7 @@ def main() -> None:
             print(
                 "Error: could not connect to chat server on localhost:50051."
             )
-            return
+            sys.exit(1)
 
         stub = chat_pb2_grpc.ChatServiceStub(channel)
         call = stub.ChatStream(_request_generator(username, send_q))
